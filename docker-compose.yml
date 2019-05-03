@@ -1,0 +1,25 @@
+version: '2'
+services:
+  db:
+    build:
+      context: db/
+    expose:
+      - "3306"
+    environment:
+      - MYSQL_ROOT_PASSWORD=root # rootパスワードの設定
+      - MYSQL_DATABASE=badge-api
+      - MYSQL_USER=user
+      - MYSQL_PASSWORD=password
+    ports:
+      - "3306:3306" # DEBUG
+  api:
+    build:
+      context: ./
+    volumes:
+      - ./:/app
+    working_dir: /app
+    command: sbt run
+    ports:
+      - "9000:9000"
+    depends_on:
+      - db
